@@ -1,0 +1,47 @@
+[
+  {
+    "name": "John Snow",
+    "country": "England",
+    "dates": [
+      "14/04/2017",
+      "17/04/2017",
+      "18/04/2017"
+    ]
+  },
+  {
+    "name": "Pierre Snowe",
+    "country": "France",
+    "dates": [
+      "15/04/2017",
+      "19/04/2017",
+      "20/04/2017"
+    ]
+  },
+  {
+    "name": "Mary Fire",
+    "country": "England",
+    "dates": [
+      "13/04/2017",
+      "16/04/2017",
+      "18/04/2017"
+    ]
+  },
+  {
+    "name": "Paul Black",
+    "country": "England",
+    "dates": [
+      "18/04/2017",
+      "19/04/2017",
+      "21/04/2017"
+    ]
+  },
+  {
+    "name": "Marie Fiere",
+    "country": "France",
+    "dates": [
+      "13/04/2017",
+      "17/04/2017",
+      "19/04/2017"
+    ]
+  }
+]
