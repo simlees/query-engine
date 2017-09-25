@@ -1,14 +1,28 @@
+import config from '../config';
+const moment = require('moment');
+
 class DataTransformer {
 
   transform(data) {
+    data = this.parseDates(data);
     const countries = [];
     data.map(attendee => this.addAttendeeAvailability(countries, attendee));
     return countries.map(country => {
       return {
         ...country,
-        bestDates: this.findMostAttendableConsecutiveDays(country.dates, 2)
+        bestDates: this.findMostAttendableConsecutiveDays(country.dates, config.consecutiveDateWindow)
       }
     });
+  }
+
+  /**
+   * Parse dates into moment.js dates
+   */
+  parseDates(data) {
+    return data.map(attendee => {
+      attendee.dates = attendee.dates.map(date => moment(date));
+      return attendee;
+    })
   }
 
   /**
@@ -31,7 +45,7 @@ class DataTransformer {
    */
   addAttendeeDatesToCountry(attendeeDates, countryDates = []) {
     for (let attendeeDate of attendeeDates) {
-      let matchingCountryDate = countryDates.find(cd => cd.date === attendeeDate);
+      let matchingCountryDate = countryDates.find(cd => cd.date.isSame(attendeeDate, 'day'));
       if (matchingCountryDate) {
         matchingCountryDate.count++;
       } else {
@@ -44,24 +58,27 @@ class DataTransformer {
     return countryDates;
   }
 
+  /**
+   * Returns the first date of a highest-attendable date window
+   * TODO - Ensure dates are consecutive (only checking order atm)
+   */
   findMostAttendableConsecutiveDays(countryDates, windowSize) {
-    countryDates.sort((a, b) => {return a.date > b.date});
-    console.log(countryDates);
+    countryDates.sort((a, b) => a.date.isAfter(b.date));
     let bestStartDate;
     let bestWindowAttendees = 0;
     let dateWindow;
     let windowAttendees;
+
     for (let i = 0; i < countryDates.length; i++) {
       dateWindow = countryDates.slice(i, i + windowSize);
-      console.log(dateWindow);
       windowAttendees = 0;
       dateWindow.forEach(date => windowAttendees += date.count);
-      console.log(windowAttendees);
       if (windowAttendees > bestWindowAttendees) {
         bestWindowAttendees = windowAttendees;
         bestStartDate = countryDates[i].date;
       }
     }
+
     return bestStartDate;
   }
 

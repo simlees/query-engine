@@ -10,8 +10,8 @@ export default class QueryEngine {
 
   start() {
     api.fetch().then(response => {
-      const data = this.dataTransformer.transform(response.data);
-      api.post(data);
+      const transformedData = this.dataTransformer.transform(response.data);
+      api.post(transformedData);
     });
   }
 
